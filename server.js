@@ -22,6 +22,7 @@ app.listen(config.port, () => {
   db.once('open', () => {
     require('./routes/placesRoutes')(app);
     require('./routes/userRoutes')(app);
+    require('./routes/visitRoutes')(app);
     console.log(`Server is listening on port ${config.port}`);
   });
 });
