@@ -1,36 +1,35 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const Visit = require('../db/models/visit');
+const Note = require('../db/models/note');
 
 module.exports = function(app) {
   /** ----------------------------------------------------------- */
-  app.post('/addVisit', (req, res) => {
-    console.log('nueva visita');
-    var visit = new Visit({
-      date: new Date(req.body.date),
+  app.post('/note', (req, res) => {
+    console.log('nueva nota');
+    var note = new Note({
       userId: mongoose.Types.ObjectId(req.body.userId),
       placeId: mongoose.Types.ObjectId(req.body.placeId),
-      dishes: req.body.dishes
+      text: req.body.text
     });
-    visit.save(function(err) {
+    note.save(function(err) {
       if (err) {
         console.error(err);
         res.sendStatus(500);
       } else {
-        console.log('visita guardada');
-        res.json(visit);
+        console.log('nota guardada');
+        res.json(note);
       }
     });
   });
 
   /** ----------------------------------------------------------- */
-  app.post('/loadVisits', (req, res) => {
-    console.log('cargando visitas..');
-    Visit.find({
-      placeId: req.body.placeId,
-      userId: req.body.userId
+  app.get('/note/:userid/:placeid', (req, res) => {
+    console.log('cargando notas');
+    Note.find({
+      placeId: req.params.placeid,
+      userId: req.params.userid
     })
-      .sort({ date: -1 })
+      .sort({ createdAt: -1 })
       .exec(function(err, results) {
         if (err) {
           console.log(err);
@@ -40,7 +39,7 @@ module.exports = function(app) {
           console.log('sin resultados');
           res.send([]);
         } else {
-          console.log('visitas encontradas:' + results.length);
+          console.log('notas encontradas: ' + results.length);
           res.send(results);
         }
       });

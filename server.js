@@ -23,6 +23,7 @@ app.listen(config.port, () => {
     require('./routes/placesRoutes')(app);
     require('./routes/userRoutes')(app);
     require('./routes/visitRoutes')(app);
+    require('./routes/notesRoutes')(app);
     console.log(`Server is listening on port ${config.port}`);
   });
 });
